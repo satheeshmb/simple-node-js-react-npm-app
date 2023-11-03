@@ -1,19 +1,26 @@
 pipeline {
-    stage('Initialize'){
-        def dockerHome = tool 'nodeagent'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
+  agent any
+    
+  tools {nodejs "node"}
+    
+  stages {
+        
+    stage('Git') {
+      steps {
+       git credentialsId: 'ede05712-7bf2-4720-bfab-ad4ca9163cbc', url: 'https://github.com/satheeshmb/simple-node-js-react-npm-app.git'
+      }
     }
-    agent {
-        docker {
-            image 'node:20.9.0-alpine3.18' 
-            args '-p 3000:3000' 
-        }
+     
+    stage('Build') {
+      steps {
+        sh 'npm install'
+      }
+    }  
+            
+    stage('Test') {
+      steps {
+        sh 'node test'
+      }
     }
-    stages {
-        stage('Build') { 
-            steps {
-                sh 'npm install' 
-            }
-        }
-    }
+  }
 }
