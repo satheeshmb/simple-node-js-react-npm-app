@@ -1,4 +1,8 @@
 pipeline {
+    stage('Initialize'){
+        def dockerHome = tool 'nodeagent'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
     agent {
         docker {
             image 'node:20.9.0-alpine3.18' 
